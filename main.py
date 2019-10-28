@@ -2,6 +2,6 @@
 import hug
 
 
-@hug.get("/")
+@hug.get("/hola")
 def messages():
-    return "hola"
+    return ""
