@@ -37,7 +37,7 @@ def VariablesReglas(responseG):
         else:
             list = historialmetascumplidas, historialmetascumplidas, False, \
                 int(ultimameta["nMessages"]), numerodemensajespromedio
-        print(list)
+
     return list
 
 
@@ -96,21 +96,17 @@ def actualizarRandS(r, s, id):
 def getreputation(idpaciente):
     responseG = requests.get("https://api-rest-botic.herokuapp.com/api/goals")
     responseModel = requests.get("https://api-rest-botic.herokuapp.com/api/bayesianModel")
-    print(idpaciente)
     a = 0.7
     w = 2
     if (responseG.status_code == 200 and responseModel.status_code == 200):
         listavariables = VariablesReglas(responseG)
         for i in responseModel.json():
-            print(i["patient"])
             if(idpaciente == i["patient"]):
                 r = int(i["r"])
                 s = int(i["s"])
 
-                print(listavariables)
         r, s = RulesModel(listavariables[0], listavariables[1], listavariables[2],
                           listavariables[3], listavariables[4], r, s)
-        print(r, s)
         reputacionDelModelo = reputationBayesianModel(r, s, a, w)
         actualizarRandS(r, s, idpaciente)
     else:
@@ -120,6 +116,4 @@ def getreputation(idpaciente):
 
 responseG = requests.get("https://api-rest-botic.herokuapp.com/api/patients")
 responseModel = requests.get("https://api-rest-botic.herokuapp.com/api/bayesianModel")
-print(responseModel.json())
-print(responseG.json())
 print(getreputation("5d997dd8af8eb50017d94c8e"))
