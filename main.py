@@ -1,8 +1,7 @@
 
 import hug
-import modelo_bayesiano
 
 
-@hug.get("/"/"")
+@hug.get("/")
 def messages():
     return "hola"
