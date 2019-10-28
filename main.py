@@ -1,7 +1,9 @@
 
 import hug
+import modelo_bayesiano
 
 
-@hug.get("/hola")
-def messages():
-    return ""
+@hug.get("/getmessages/{id}")
+def messages(id: str):
+    i = modelo_bayesiano.getreputation(id)
+    return i
