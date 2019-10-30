@@ -58,7 +58,8 @@ def mensajespreguntas(idpaciente, requestM, requestG, reputacionPaciente):
                                   0, len(MInicioKindorAcertive)-1)]
                                   ["description"]+" " + j["description"]+" " +
                                   MFinalesKindorAcertive[random.randint(0,
-                                                                        len(MFinalesKindorAcertive)-1)]
+                                                                        len(MFinalesKindorAcertive)
+                                                                        - 1)]
                                   ["description"],
                                   "idmeta": j["_id"]})
     return Preguntas
@@ -133,6 +134,3 @@ def messages(id: str):
     MPreguntas = mensajespreguntas(id, requestM, responseG, reputacionP)
     MRespuestasP, MRespuestasN = mensajesRespuesta(id, requestM, responseG, reputacionP)
     return MPreguntas, MRespuestasN, MRespuestasP
-
-
-print(messages("5db7b48006fd9800178f7222"))
