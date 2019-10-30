@@ -96,7 +96,7 @@ def actualizarRandS(r, s, id):
 def getreputation(idpaciente):
     responseG = requests.get("https://api-rest-botic.herokuapp.com/api/goals")
     responseModel = requests.get("https://api-rest-botic.herokuapp.com/api/bayesianModel")
-    a = 0.7
+    a = 0.40
     w = 2
     if (responseG.status_code == 200 and responseModel.status_code == 200):
         listavariables = VariablesReglas(responseG)
@@ -104,7 +104,7 @@ def getreputation(idpaciente):
             if(idpaciente == i["patient"]):
                 r = int(i["r"])
                 s = int(i["s"])
-
+        print(r, s)
         r, s = RulesModel(listavariables[0], listavariables[1], listavariables[2],
                           listavariables[3], listavariables[4], r, s)
         reputacionDelModelo = reputationBayesianModel(r, s, a, w)
@@ -112,8 +112,3 @@ def getreputation(idpaciente):
     else:
         print("status server != 200")
     return reputacionDelModelo
-
-
-responseG = requests.get("https://api-rest-botic.herokuapp.com/api/patients")
-responseModel = requests.get("https://api-rest-botic.herokuapp.com/api/bayesianModel")
-print(getreputation("5d997dd8af8eb50017d94c8e"))
