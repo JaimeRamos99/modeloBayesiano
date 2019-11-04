@@ -5,19 +5,19 @@ import requests
 import random
 
 
-def mensajesInicioPregunta(idmeta, requestM):
+def mensajesInicioPregunta(requestM):
     mensajesInicioPreguntas = []
     for i in requestM.json():
-        if(i["goals"] == idmeta and i["classMessage"] == "GenericoInicio" and i["isQorA"]
+        if(i["classMessage"] == "GenericoInicio" and i["isQorA"]
            == "Pregunta"):
             mensajesInicioPreguntas.append(i)
     return mensajesInicioPreguntas
 
 
-def mensajesFinalesPregunta(idmeta, requestM):
+def mensajesFinalesPregunta(requestM):
     mensajesFinalesPreguntas = []
     for i in requestM.json():
-        if(i["goals"] == idmeta and i["classMessage"] == "GenericoFinal" and i["isQorA"]
+        if(i["classMessage"] == "GenericoFinal" and i["isQorA"]
            == "Pregunta"):
             mensajesFinalesPreguntas.append(i)
     return mensajesFinalesPreguntas
@@ -27,8 +27,8 @@ def mensajespreguntas(idpaciente, requestM, requestG, reputacionPaciente):
     Preguntas = []
     for j in requestG.json():
         if(j["pat"] == idpaciente and j["state"] == "2"):
-            MInicio = mensajesInicioPregunta(j["_id"], requestM)
-            MFinales = mensajesFinalesPregunta(j["_id"], requestM)
+            MInicio = mensajesInicioPregunta(requestM)
+            MFinales = mensajesFinalesPregunta(requestM)
             MInicioKindorAcertive = []
             MFinalesKindorAcertive = []
             cont1 = 0
@@ -65,20 +65,20 @@ def mensajespreguntas(idpaciente, requestM, requestG, reputacionPaciente):
     return Preguntas
 
 
-def mensajesRespuestaPositiva(idmeta, requestM):
+def mensajesRespuestaPositiva(requestM):
     mensajesRespuestasPositivas = []
     for i in requestM.json():
-        if(i["goals"] == idmeta and i["classMessage"] == "GenericoInicio" and i["isQorA"]
+        if(i["classMessage"] == "GenericoInicio" and i["isQorA"]
            == "RespuestaPositiva"):
             mensajesRespuestasPositivas.append(i)
     return mensajesRespuestasPositivas
 
 
-def mensajesRespuestaNegativa(idmeta, requestM):
+def mensajesRespuestaNegativa(requestM):
     mensajesRespuestasNegativas = []
     for i in requestM.json():
-        if(i["goals"] == idmeta and i["classMessage"] == "GenericoInicio" and i["isQorA"]
-           == "RespuestaNegativa"):
+        if(i["classMessage"] == "GenericoInicio" and i["isQorA"]
+                == "RespuestaNegativa"):
             mensajesRespuestasNegativas.append(i)
     return mensajesRespuestasNegativas
 
@@ -88,8 +88,8 @@ def mensajesRespuesta(idpaciente, requestM, requestG, reputacionDelModelo):
     RNegativas = []
     for J in requestG.json():
         if(idpaciente == J["pat"] and J["state"] == "2"):
-            mensajesrespuestapositiva = mensajesRespuestaPositiva(J["_id"], requestM)
-            mensajesrespuestanegativa = mensajesRespuestaNegativa(J["_id"], requestM)
+            mensajesrespuestapositiva = mensajesRespuestaPositiva(requestM)
+            mensajesrespuestanegativa = mensajesRespuestaNegativa(requestM)
             MRPKindorAssertive = []
             MRNKindorAssertive = []
             if(reputacionDelModelo >= 0.40):
@@ -134,3 +134,6 @@ def messages(id: str):
     MPreguntas = mensajespreguntas(id, requestM, responseG, reputacionP)
     MRespuestasP, MRespuestasN = mensajesRespuesta(id, requestM, responseG, reputacionP)
     return MPreguntas, MRespuestasN, MRespuestasP
+
+
+print(messages("5db7b48006fd9800178f7222"))
