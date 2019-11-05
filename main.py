@@ -83,6 +83,25 @@ def mensajesRespuestaNegativa(requestM):
     return mensajesRespuestasNegativas
 
 
+def mensajesBienvenida(requestM):
+    mensajesBienvenidas = []
+    for i in requestM.json():
+        if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Saludos"):
+            mensajesBienvenidas.append(i)
+
+    saludos = mensajesBienvenidas[random.randint(0, len(mensajesBienvenidas) - 1)]
+    return saludos
+
+
+def mensajesDespedida(requestM):
+    mensajesDespedidas = []
+    for i in requestM.json():
+        if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Despedidas"):
+            mensajesDespedidas.append(i)
+    despedida = mensajesDespedidas[random.randint(0, len(mensajesDespedidas) - 1)]
+    return despedida
+
+
 def mensajesRespuesta(idpaciente, requestM, requestG, reputacionDelModelo):
     RPositivas = []
     RNegativas = []
@@ -133,7 +152,9 @@ def messages(id: str):
     print(reputacionP)
     MPreguntas = mensajespreguntas(id, requestM, responseG, reputacionP)
     MRespuestasP, MRespuestasN = mensajesRespuesta(id, requestM, responseG, reputacionP)
-    return MPreguntas, MRespuestasN, MRespuestasP
+    saludos = mensajesBienvenida(requestM)
+    despedida = mensajesDespedida(requestM)
+    return MPreguntas, MRespuestasN, MRespuestasP, saludos, despedida
 
 
 print(messages("5db7b48006fd9800178f7222"))
