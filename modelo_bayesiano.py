@@ -98,6 +98,7 @@ def getreputation(idpaciente):
     responseModel = requests.get("https://api-rest-botic.herokuapp.com/api/bayesianModel")
     a = 0.40
     w = 2
+    metasState = []
     if (responseG.status_code == 200 and responseModel.status_code == 200):
         listavariables = VariablesReglas(responseG)
         for i in responseModel.json():
@@ -107,8 +108,14 @@ def getreputation(idpaciente):
         print(r, s)
         r, s = RulesModel(listavariables[0], listavariables[1], listavariables[2],
                           listavariables[3], listavariables[4], r, s)
-        reputacionDelModelo = reputationBayesianModel(r, s, a, w)
-        actualizarRandS(r, s, idpaciente)
+        for j in responseG.json():
+            if(j["state"] == 1 or j["state"] == 0):
+                metasState.append(j)
+        if(len(metasState) != 0):
+            reputacionDelModelo = reputationBayesianModel(r, s, a, w)
+            actualizarRandS(r, s, idpaciente)
+        else:
+            reputacionDelModelo = a
     else:
         print("status server != 200")
     return reputacionDelModelo

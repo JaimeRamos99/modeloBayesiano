@@ -1,4 +1,3 @@
-
 import hug
 import modelo_bayesiano
 import requests
@@ -83,21 +82,34 @@ def mensajesRespuestaNegativa(requestM):
     return mensajesRespuestasNegativas
 
 
-def mensajesBienvenida(requestM):
+def mensajesBienvenida(requestM, reputacionDelModelo):
     mensajesBienvenidas = []
-    for i in requestM.json():
-        if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Saludos"):
-            mensajesBienvenidas.append(i)
-
+    if(reputacionDelModelo >= 0.40):
+        for i in requestM.json():
+            if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Saludos" and
+               i["typeMessage"] == "kind"):
+                mensajesBienvenidas.append(i)
+    else:
+        for i in requestM.json():
+            if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Saludos" and
+               i["typeMessage"] == "assertive"):
+                mensajesBienvenidas.append(i)
     saludos = mensajesBienvenidas[random.randint(0, len(mensajesBienvenidas) - 1)]
     return saludos
 
 
-def mensajesDespedida(requestM):
+def mensajesDespedida(requestM, reputacionDelModelo):
     mensajesDespedidas = []
-    for i in requestM.json():
-        if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Despedidas"):
-            mensajesDespedidas.append(i)
+    if(reputacionDelModelo >= 0.40):
+        for i in requestM.json():
+            if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Despedidas" and
+               i["typeMessage"] == "kind"):
+                mensajesDespedidas.append(i)
+    else:
+        for i in requestM.json():
+            if(i["classMessage"] == "GenericoInicio" and i["isQorA"] == "Despedidas" and
+               i["typeMessage"] == "assertive"):
+                mensajesDespedidas.append(i)
     despedida = mensajesDespedidas[random.randint(0, len(mensajesDespedidas) - 1)]
     return despedida
 
@@ -152,9 +164,9 @@ def messages(id: str):
     print(reputacionP)
     MPreguntas = mensajespreguntas(id, requestM, responseG, reputacionP)
     MRespuestasP, MRespuestasN = mensajesRespuesta(id, requestM, responseG, reputacionP)
-    saludos = mensajesBienvenida(requestM)
-    despedida = mensajesDespedida(requestM)
+    saludos = mensajesBienvenida(requestM, reputacionP)
+    despedida = mensajesDespedida(requestM, reputacionP)
     return MPreguntas, MRespuestasN, MRespuestasP, saludos, despedida
 
 
-print(messages("5db7b48006fd9800178f7222"))
+print(messages("5dc19efb3cde3f0017409657"))
