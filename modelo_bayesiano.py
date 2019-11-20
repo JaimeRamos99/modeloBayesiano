@@ -15,6 +15,8 @@ def VariablesReglas(responseG):
     historialmetascumplidas = 0
     historialmetasincumplidas = 0
     numerodemensajespromedio = 0
+    ultimameta = []
+    list = []
     if (responseG.status_code == 200):
         for i in responseG.json():
             if(i["state"] == "1"):
@@ -29,14 +31,16 @@ def VariablesReglas(responseG):
                     if(i["nMessages"] is not None):
                         numerodemensajespromedio = numerodemensajespromedio + \
                             int(float(i["nMessages"]))
-        numerodemensajespromedio = numerodemensajespromedio / \
-            (historialmetascumplidas + historialmetasincumplidas)
-        if(ultimameta["state"] == "1"):
-            list = historialmetascumplidas, historialmetascumplidas, True, \
-                int(ultimameta["nMessages"]), numerodemensajespromedio
-        else:
-            list = historialmetascumplidas, historialmetascumplidas, False, \
-                int(ultimameta["nMessages"]), numerodemensajespromedio
+        if(historialmetascumplidas != 0 or historialmetasincumplidas != 0):
+            numerodemensajespromedio = numerodemensajespromedio / \
+                (historialmetascumplidas + historialmetasincumplidas)
+        if(len(ultimameta) != 0):
+            if(ultimameta["state"] == "1"):
+                list = historialmetascumplidas, historialmetascumplidas, True, \
+                    int(ultimameta["nMessages"]), numerodemensajespromedio
+            else:
+                list = historialmetascumplidas, historialmetascumplidas, False, \
+                    int(ultimameta["nMessages"]), numerodemensajespromedio
 
     return list
 
@@ -105,9 +109,9 @@ def getreputation(idpaciente):
             if(idpaciente == i["patient"]):
                 r = int(i["r"])
                 s = int(i["s"])
-        print(r, s)
-        r, s = RulesModel(listavariables[0], listavariables[1], listavariables[2],
-                          listavariables[3], listavariables[4], r, s)
+        if(len(listavariables)):
+            r, s = RulesModel(listavariables[0], listavariables[1], listavariables[2],
+                              listavariables[3], listavariables[4], r, s)
         for j in responseG.json():
             if(j["state"] == 1 or j["state"] == 0):
                 metasState.append(j)

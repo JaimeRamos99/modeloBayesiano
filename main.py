@@ -160,12 +160,10 @@ def mensajesRespuesta(idpaciente, requestM, requestG, reputacionDelModelo):
 def messages(id: str):
     requestM = requests.get("https://api-rest-botic.herokuapp.com/api/messages")
     responseG = requests.get("https://api-rest-botic.herokuapp.com/api/goals")
-    print(responseG.json())
     if(len(responseG.json()) != 0):
         reputacionP = modelo_bayesiano.getreputation(id)
     else:
         reputacionP = 0.40
-    print(reputacionP)
     MPreguntas = mensajespreguntas(id, requestM, responseG, reputacionP)
     MRespuestasP, MRespuestasN = mensajesRespuesta(id, requestM, responseG, reputacionP)
     saludos = mensajesBienvenida(requestM, reputacionP)
