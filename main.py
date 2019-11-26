@@ -169,6 +169,3 @@ def messages(id: str):
     saludos = mensajesBienvenida(requestM, reputacionP)
     despedida = mensajesDespedida(requestM, reputacionP)
     return MPreguntas, MRespuestasN, MRespuestasP, saludos, despedida
-
-
-print(messages("5dd0517dd15d7100175f0a06"))
